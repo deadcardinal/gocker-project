@@ -13,10 +13,11 @@ func main() {
 		Update   *commands.UpdateCmd   `arg:"subcommand:update"`
 		Checkout *commands.CheckoutCmd `arg:"subcommand:checkout"`
 		Command  *commands.CommandCmd  `arg:"subcommand:command"`
+		Shell    *commands.ShellCmd    `arg:"subcommand:shell"`
 	}
 	arg.MustParse(&args)
 
-	config := yaml.GetConfigFromYaml(args.File)
+	config := yaml.GetConfigFromFile(args.File)
 
 	if args.Update != nil {
 		args.Update.Run(config)
@@ -28,5 +29,9 @@ func main() {
 
 	if args.Command != nil {
 		args.Command.Run(config)
+	}
+
+	if args.Shell != nil {
+		args.Shell.Run(config)
 	}
 }

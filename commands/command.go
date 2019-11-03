@@ -6,10 +6,23 @@ import (
 )
 
 type CommandCmd struct {
-	Command string `arg:"positional" arg:"required"`
+	Command  string   `arg:"positional" arg:"required"`
+	Services []string `arg:"positional"`
 }
 
 func (command *CommandCmd) Run(config yaml.Config) {
-	var manipulator = manipulator.NewFromConfig(config)
-	manipulator.Commands = nil
+	manipulator := manipulator.NewFromConfig(config)
+
+	if len(command.Services) > 0 {
+		manipulator.RunForSpecifiedServices(command.Command, command.Services)
+	} else {
+
+		serviceNames := make([]string, 0, len(config.Services))
+		for serviceName := range config.Services {
+			serviceNames = append(serviceNames, serviceName)
+		}
+
+		manipulator.RunForSpecifiedServices(command.Command, serviceNames)
+	}
+
 }

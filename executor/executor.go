@@ -3,7 +3,9 @@ package executor
 import (
 	"bufio"
 	"log"
+	"os"
 	"os/exec"
+	"strings"
 )
 
 func Run(service string, dir string, name string, args ...string) {
@@ -21,4 +23,21 @@ func Run(service string, dir string, name string, args ...string) {
 	}
 
 	cmd.Wait()
+}
+
+func ExecInput(service string, dir string, input string) error {
+	// Remove the newline character.
+	input = strings.TrimSuffix(input, "\n")
+	commandLine := strings.Split(input, " ")
+
+	// Prepare the command to execute.
+	cmd := exec.Command(commandLine[0], commandLine[1:]...)
+	cmd.Dir = dir
+
+	// Set the correct output device.
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+
+	// Execute the command and return the error.
+	return cmd.Run()
 }
