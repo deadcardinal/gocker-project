@@ -26,7 +26,6 @@ func (command *ShellCmd) Run(config yaml.Config) {
 			fmt.Print("[all] \u25b6 ")
 		}
 
-		// Read the keyboad input.
 		input, err := reader.ReadString('\n')
 		if err != nil {
 			log.Output(0, "[system] "+err.Error())
