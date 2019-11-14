@@ -1,6 +1,8 @@
 package manipulator
 
 import (
+	"fmt"
+	"gocker-project/env"
 	"gocker-project/yaml"
 	"strings"
 	"sync"
@@ -11,6 +13,8 @@ type Manipulator struct {
 }
 
 func NewFromConfig(config yaml.Config) Manipulator {
+	appConfig := env.GetConfig()
+
 	manipulator := Manipulator{
 		Commands: map[int]Command{},
 	}
@@ -26,7 +30,14 @@ func NewFromConfig(config yaml.Config) Manipulator {
 				command.Name = label[firstDot:len(label)]
 				command.Exec = labelValue
 				command.ServiceName = service
-				command.Path = "./src/" + service
+
+				if command.Path == "" {
+					command.Path = fmt.Sprintf("./%s/%s", appConfig.SourceDir, service)
+				}
+
+				if label == "project.src" {
+					command.Path = fmt.Sprintf("%s/%s", labelValue, service)
+				}
 			}
 		}
 

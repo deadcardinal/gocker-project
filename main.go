@@ -3,9 +3,17 @@ package main
 import (
 	"gocker-project/commands"
 	"gocker-project/yaml"
+	"log"
 
 	"github.com/alexflint/go-arg"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Output(0, "[system] .env file not found")
+	}
+}
 
 func main() {
 	var args struct {

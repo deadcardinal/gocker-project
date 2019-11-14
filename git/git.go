@@ -1,6 +1,8 @@
 package git
 
 import (
+	"fmt"
+	"gocker-project/env"
 	"gocker-project/yaml"
 	"log"
 	"os"
@@ -89,6 +91,8 @@ func NewFromConfig(config yaml.Config) Git {
 		Repos: map[string]Repository{},
 	}
 
+	appConfig := env.GetConfig()
+
 	for service, serviceData := range config.Services {
 		repo := Repository{}
 
@@ -96,11 +100,18 @@ func NewFromConfig(config yaml.Config) Git {
 			if label == "project.git" {
 				repo.Address = labelValue
 				repo.ServiceName = service
-				repo.Path = "src/" + service
+
+				if repo.Path == "" {
+					repo.Path = fmt.Sprintf("%s/%s", appConfig.SourceDir, service)
+				}
 			}
 
 			if label == "project.git.branch" {
 				repo.Branch = labelValue
+			}
+
+			if label == "project.src" {
+				repo.Path = fmt.Sprintf("%s/%s", labelValue, service)
 			}
 		}
 

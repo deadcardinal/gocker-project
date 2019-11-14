@@ -4,3 +4,5 @@ src
 vendor
 bin
 id_rsa
+.vscode
+.env
