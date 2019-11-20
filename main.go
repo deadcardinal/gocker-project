@@ -22,6 +22,7 @@ func main() {
 		Checkout *commands.CheckoutCmd `arg:"subcommand:checkout"`
 		Command  *commands.CommandCmd  `arg:"subcommand:command"`
 		Shell    *commands.ShellCmd    `arg:"subcommand:shell"`
+		Run      *commands.RunCmd      `arg:"subcommand:run"`
 	}
 	arg.MustParse(&args)
 
@@ -41,5 +42,9 @@ func main() {
 
 	if args.Shell != nil {
 		args.Shell.Run(config)
+	}
+
+	if args.Run != nil {
+		args.Run.Run(config)
 	}
 }

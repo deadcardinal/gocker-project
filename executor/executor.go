@@ -2,6 +2,7 @@ package executor
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -11,6 +12,8 @@ import (
 func Run(service string, dir string, name string, args ...string) {
 	cmd := exec.Command(name, args...)
 	cmd.Dir = dir
+
+	log.Output(0, fmt.Sprintf("[%s] \u25b6 %s", service, name+" "+strings.Join(args, " ")))
 
 	stderr, _ := cmd.StderrPipe()
 	cmd.Start()
